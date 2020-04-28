@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debugging Page</title>
+
+</head>
+<body style="margin: auto; width: 600px;">
+    <h1 onclick="say_hi();">Teach me master.</h1>
+
+    <p>Please type your password(hypotetically) and then click [Record] or type enter. After recording click [Clean] and repeat.
+         Please use the same password and without error(e.g. no backspace,etc)</p>
+    <p>If you a have a failed try then just click [Clean] without recording it.
+        With several samples recorded you can click on [Download csv] and play :).</p>
+    <form method="POST" target="#" style="width: 100%;">
+        <label for="password_text">Password: </label>
+        <input type="text" id="password_text" name="password_text" >
+        <input type="button" id="save" name="save" value="Record!" onclick="record_pass()">
+        <input type="button" id="clean" name="clean" value="Clean" onclick="clean_form()">
+        <br>
+        <label for="event_vector" >Event vector:</label><br>
+        <select id ="event_vector" name="event_vector" size="10" style="width: 500px;">
+        </select>
+        <br>
+        <label for="feature_vector" >Feature vector:</label><br>
+        <select id ="feature_vector" name="feature_vector" size="10" style="width: 500px;">
+        </select>
+        <br>
+        <label for="output" >training Data (output):</label><br>
+        <textarea id ="output" name="output"
+        style="width: 500px;overflow-y: scroll;overflow-x: scroll;white-space: nowrap;"></textarea>
+        <br>
+        <button type="button" value="download" id="download">Download csv</button>
+        <button type="button" value="cleanup" id="cleanup">Clean all and star over again!</button>
+        </select>
+    </form>
+
+    <p>Stephen Krol 2020</p>
+
+    <script lang="javascript">
+        "use strict";
+        document.getElementById("password_text").addEventListener("keypress", function(event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                document.getElementById("save").click();
+                //alert("saved");
+            }
+        });
+
+        document.addEventListener('keydown', event => {
+            var opt = document.createElement("option");
+            opt.value = event.timeStamp;
+            opt.text = "{key: \""+event.key+"\",\ttimeStamp: "+event.timeStamp+" }";
+            var list_element = document.querySelector("#event_vector");
+            list_element.add(opt);
+        });
+
+        function record_pass(){
+            let e = document.querySelector("#event_vector");
+            let output_element = document.querySelector("#feature_vector");
+            var csv = document.getElementById('output');
+            var vector = [];
+
+            for (let i = 1; i < e.children.length; i++) {
+                let opt = document.createElement("option");
+                opt.value = e.children[i].value - e.children[i-1].value;
+                opt.text = opt.value;
+                output_element.add(opt);
+                vector.push(e.children[i].value - e.children[i-1].value);
+            }
+            csv.innerHTML = csv.innerHTML + vector + "\n";
+        }
+
+        function say_hi(){ //and be polite
+            alert("hi!");
+        }
+
+        function saveTextAsFile() {
+            var textToWrite = document.getElementById('output').innerHTML;
+            var textFileAsBlob = new Blob([ textToWrite ], { type: 'text/plain' });
+            var fileNameToSaveAs = "trainning_output.csv";
+
+            var downloadLink = document.createElement("a");
+            downloadLink.download = fileNameToSaveAs;
+            downloadLink.innerHTML = "Download File";
+            if (window.webkitURL != null) {
+                // Chrome allows the link to be clicked without actually adding it to the DOM.
+                downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
+            } else {
+                // Firefox requires the link to be added to the DOM before it can be clicked.
+                downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+                downloadLink.onclick = destroyClickedElement;
+                downloadLink.style.display = "none";
+                document.body.appendChild(downloadLink);
+            }
+            downloadLink.click();
+        }
+
+        var button = document.getElementById('download');
+        button.addEventListener('click', saveTextAsFile);
+
+        function destroyClickedElement(event) {
+            // remove the link from the DOM
+            document.body.removeChild(event.target);
+        }
+
+        function clean_form() {
+            var password = document.getElementById("password_text");
+            password.value="";
+            let e = document.querySelector("#event_vector");
+            e.innerHTML= "";
+            let output_element = document.querySelector("#feature_vector");
+            output_element.innerHTML = "";
+        }
+
+        function cleanup_all() {
+            clean_form();
+            var o = document.getElementById('output');
+            o.innerHTML = "";
+
+        }
+        var button_cleanup = document.getElementById('cleanup');
+        button_cleanup.addEventListener('click', cleanup_all);
+    </script>
+</body>
+</html>
