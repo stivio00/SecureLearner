@@ -3,9 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Debugging Page</title>
+
 </head>
-<body>
-    <h1>TODO</h1>
+<body style="margin: auto; width: 600px;">
+    <h1 onclick="say_hi();">Teach me master.</h1>
+    <p>First load your trainned model.json into the page.</p>
+    <p>And then please type your password(hypotetically) and then click [Check] or type enter. Then I will try to authenticate you.</p>
+
+    <form method="POST" target="#" style="width: 100%;">
+        <label for="password_text">Password: </label>
+        <input type="text" id="password_text" name="password_text" >
+        <input type="button" id="check" name="check" value="Check!" onclick="check_pass())">
+        <br>
+        <label for="output" >Result: </label><br>
+        <input type="text" id="output" name="output" value="Waiting for the  password">
+        <br><br>
+        <label for="feature_vector" >Model:</label><br>
+
+        <br>
+        <label for="output_console" >Console:</label><br>
+        <textarea id ="output_console" name="output_console"
+        style="width: 500px;overflow-y: scroll;overflow-x: scroll;white-space: nowrap;"></textarea>
+        <br>
+        <input type="file" value="upload" id="upload">Upload Model</button>
+        <button type="button" value="cleanup" id="cleanup">Clean up</button>
+        </select>
+    </form>
+
+    <p>Stephen Krol 2020</p>
+
+    <script lang="javascript">
+        "use strict";
+
+        function say_hi(){ //and be polite
+            alert("hi!");
+        }
+    </script>
 </body>
 </html>
