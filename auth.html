@@ -17,23 +17,27 @@
         <input type="button" id="check" name="check" value="Check!" onclick="check_pass()">
         <button type="button" value="cleanup" id="cleanup">Clean up</button>
         <br>
-        <label for="output" >Result: </label><br>
-        <input type="text" id="output" name="output" value="Waiting for the  password">
-        <br><br>
-        <label for="output_console" >Console:</label><br>
-        <textarea id ="output_console" name="output_console"
-        style="width: 500px;overflow-y: scroll;overflow-x: scroll;white-space: nowrap;"></textarea>
-        <br>
         <label for="upload" >Model file (model.json): </label>
         <input type="file" value="upload_file" id="upload_file"></button>
-        <div style="display: none;">
+        <p style="color: blue; text-decoration: solid; cursor: pointer;" 
+        onclick="var div = document.querySelector('#extra_info');
+        div.style.display=div.style.display=='none'?'block':'none';return false">
+        Toggle debug information visibility</p>
+        <div id="extra_info" style="display: none;">
         <label for="event_vector" >Event vector:</label><br>
         <select id ="event_vector" name="event_vector" size="10" style="width: 500px;">
         </select>
         <br>
         <label for="feature_vector" >Feature vector:</label><br>
         <select id ="feature_vector" name="feature_vector" size="10" style="width: 500px;">
-        </select>
+        </select><br>
+        <label for="output" >Result: </label><br>
+        <input type="text" id="output" name="output" value="Waiting for the  password">
+        <br>
+        <label for="output_console" >Console:</label><br>
+        <textarea id ="output_console" name="output_console"
+        style="width: 500px;overflow-y: scroll;overflow-x: scroll;white-space: nowrap;"></textarea>
+        <br>
         </div>
     </form>
 
