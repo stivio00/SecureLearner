@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Debugging Page</title>
+    <title>Authentication Page</title>
 
 </head>
 <body style="margin: auto; width: 600px;">
     <h1 onclick="say_hi();">Let me try master</h1>
-    <p>First load your trainned model.json into the page.</p>
+    <p>First load your pre-trained model.json into the page.</p>
     <p>And then please type your password(hypotetically) and then click [Check] or type enter. Then I will try to authenticate you.</p>
 
     <form method="POST" target="#" style="width: 100%;">
         <label for="password_text">Password: </label>
         <input type="text" id="password_text" name="password_text" >
         <input type="button" id="check" name="check" value="Check!" onclick="check_pass()">
+        <button type="button" value="cleanup" id="cleanup">Clean up</button>
         <br>
         <label for="output" >Result: </label><br>
         <input type="text" id="output" name="output" value="Waiting for the  password">
@@ -24,12 +25,8 @@
         style="width: 500px;overflow-y: scroll;overflow-x: scroll;white-space: nowrap;"></textarea>
         <br>
         <label for="upload" >Model file (model.json): </label>
-        <input type="file" value="upload_file" id="upload_file">select file</button>
-        <button type="button" value="upload_action" id="upload_action">Load me!</button>
-        <button type="button" value="cleanup" id="cleanup">Clean up</button>
-        </select>
-
-
+        <input type="file" value="upload_file" id="upload_file"></button>
+        <div style="display: none;">
         <label for="event_vector" >Event vector:</label><br>
         <select id ="event_vector" name="event_vector" size="10" style="width: 500px;">
         </select>
@@ -37,6 +34,7 @@
         <label for="feature_vector" >Feature vector:</label><br>
         <select id ="feature_vector" name="feature_vector" size="10" style="width: 500px;">
         </select>
+        </div>
     </form>
 
     <p>Stephen Krol 2020</p>
@@ -68,12 +66,12 @@
             var element = document.getElementById('output_console');
             element.innerHTML += ">>> Load model:\n";
             element.innerHTML += contents;
-            model = eval(contents);
-            element.innerHTML += "Model have:: "+model.p;
+            model = JSON.parse(contents);
+            element.innerHTML += "\nModel have  "+model.p.length+" parameters\n";
         }
 
     document.getElementById('upload_file').addEventListener('change', readSingleFile, false);
-
+    document.getElementById('cleanup').addEventListener('click', cleanup);
 
     document.addEventListener('keydown', event => {
             var opt = document.createElement("option");
@@ -83,7 +81,46 @@
             list_element.add(opt);
     });
 
-    function check_pass(){
+    function cleanup() {
+        document.querySelector("#password_text").value = "";
+        document.querySelector("#event_vector").innerHTML = "";
+        document.querySelector("#feature_vector").innerHTML = "";
+    } 
+
+    function do_check(v){
+        var [p1, p2, p3, p4, p5, p6] = model.p;
+        var n = model.n;
+
+        var value = false;
+
+        var v_total = v.reduce((a, b) => a + b, 0) //sum(vector)
+        var v_avg = v_total / v.length;   //mean(vector) 
+        var v_std = Math.sqrt(v.map(x => Math.pow(x-v_avg,2)).reduce((a,b) => a+b)/v.length); //std(vector)
+
+
+        console.log({v_total,v_avg,v_std,p1,p2,p3,p4,p5,p5,n});
+
+        if ( v_total >= (p1 - n*p2) && v_total <= (p1 + n*p2)) {
+            value = true;
+            console.log("first check");
+        }
+
+        if ( v_avg >= (p3 - n*p4) && v_avg <= (p3 + n*p4)){
+            value = value && true;
+            console.log("second check");
+        }
+            
+
+        if ( v_std >= (p5 - n*p6) && v_std <= (p5 + n*p6)){
+            value = value & true;
+            console.log("third check");
+        }
+            
+
+        return value;
+    }
+
+    function check_pass() {
             let e = document.querySelector("#event_vector");
             let output_element = document.querySelector("#feature_vector");
             var vector = [];
@@ -94,6 +131,20 @@
                 output_element.add(opt);
                 vector.push(e.children[i].value - e.children[i-1].value);
             }
+
+            if (model===null) {
+                alert("Model is not loaded");
+                cleanup();
+                return;
+            } 
+            //TODO: implement model criteria on the fly
+
+            if (do_check(vector)===true) {
+                alert("Authentication passed :)");
+            } else {
+                alert("Fail!!!! :(");
+            }
+            cleanup();
     }
     </script>
 </body>
