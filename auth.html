@@ -14,7 +14,7 @@
     <form method="POST" target="#" style="width: 100%;">
         <label for="password_text">Password: </label>
         <input type="text" id="password_text" name="password_text" >
-        <input type="button" id="check" name="check" value="Check!" onclick="check_pass())">
+        <input type="button" id="check" name="check" value="Check!" onclick="check_pass()">
         <br>
         <label for="output" >Result: </label><br>
         <input type="text" id="output" name="output" value="Waiting for the  password">
@@ -28,12 +28,24 @@
         <button type="button" value="upload_action" id="upload_action">Load me!</button>
         <button type="button" value="cleanup" id="cleanup">Clean up</button>
         </select>
+
+
+        <label for="event_vector" >Event vector:</label><br>
+        <select id ="event_vector" name="event_vector" size="10" style="width: 500px;">
+        </select>
+        <br>
+        <label for="feature_vector" >Feature vector:</label><br>
+        <select id ="feature_vector" name="feature_vector" size="10" style="width: 500px;">
+        </select>
     </form>
 
     <p>Stephen Krol 2020</p>
 
     <script lang="javascript">
         "use strict";
+
+        //Globals
+        var model = null;
 
         function say_hi(){ //and be polite
             alert("hi!");
@@ -54,11 +66,35 @@
 
         function displayContents(contents) {
             var element = document.getElementById('output_console');
-            element.innerHTML += ">>> Load file with content:\n";
+            element.innerHTML += ">>> Load model:\n";
             element.innerHTML += contents;
+            model = eval(contents);
+            element.innerHTML += "Model have:: "+model.p;
         }
 
     document.getElementById('upload_file').addEventListener('change', readSingleFile, false);
+
+
+    document.addEventListener('keydown', event => {
+            var opt = document.createElement("option");
+            opt.value = event.timeStamp;
+            opt.text = "{key: \""+event.key+"\",\ttimeStamp: "+event.timeStamp+" }";
+            var list_element = document.querySelector("#event_vector");
+            list_element.add(opt);
+    });
+
+    function check_pass(){
+            let e = document.querySelector("#event_vector");
+            let output_element = document.querySelector("#feature_vector");
+            var vector = [];
+            for (let i = 1; i < e.children.length; i++) {
+                let opt = document.createElement("option");
+                opt.value = e.children[i].value - e.children[i-1].value;
+                opt.text = opt.value;
+                output_element.add(opt);
+                vector.push(e.children[i].value - e.children[i-1].value);
+            }
+    }
     </script>
 </body>
 </html>
