@@ -33,3 +33,6 @@ Also, can we train a machine learning model to detect if this feature is made by
 
 - Authentication (auth.html):
     Sample you need to load the model.json, and test the result. Good luck.
+
+    As a general workflow:
+    ![Workflow](/info_flow.png "Workflow")
