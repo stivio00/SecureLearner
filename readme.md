@@ -1,6 +1,6 @@
 # Introduction
-This project is a proof of concept for capturing the time delays between the characters in aa typed password. And then build an "in-between-character-delay-vector" to train a statistical model to validate password authenticity.
-This feature vector is a clection of times in milliseconds. First we start capturing the samples using a special tool.
+This project is a proof of concept for capturing the time delays between the characters in a typed password. And then build an "in-between-character-delay-vector" to train a statistical model to validate password authenticity.
+This feature vector is a colection of times in milliseconds. First we start capturing the samples using a special tool.
 After input we save a measure file and train a model (supervised learning) to generate a model. Withit test some intruders.
 
 # Problem statement
