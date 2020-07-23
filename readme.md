@@ -17,7 +17,7 @@ Also, can we train a machine learning model to detect if this feature is made by
 - Implement a server site version of this prototype.
 - usea a neural network to detect automatically outliers (unsupervised learning without labels)
 
-## Atifacts and use cases
+## Artifacts and use cases
 - Debuggin GUI Console (index.html):
     This page is to capture person behaviour. For example, yo can type your message (e.g. hello world) and click "Record!"
     for capturing the feature veector in a csv buffer. then click "Clean".
